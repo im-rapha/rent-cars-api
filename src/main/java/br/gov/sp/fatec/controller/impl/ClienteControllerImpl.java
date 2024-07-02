@@ -18,26 +18,29 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public ResponseEntity<ClienteResponse> save(ClienteRequest cliente) {
-        return null;
+        ClienteResponse clienteResponse = clienteService.save(cliente);
+        return ResponseEntity.ok(clienteResponse);
     }
 
     @Override
     public ResponseEntity<ClienteResponse> findById(Long id) {
-        return null;
+        return ResponseEntity.ok(clienteService.findById(id));
     }
 
     @Override
     public ResponseEntity<List<ClienteResponse>> findAll() {
-        return null;
+        return ResponseEntity.ok(clienteService.findAll());
     }
 
     @Override
     public ResponseEntity<Void> updateById(Long id, ClienteUpdateRequest request) {
-        return null;
+        clienteService.updateById(id, request);
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> deleteById(Long id) {
-        return null;
+        clienteService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
