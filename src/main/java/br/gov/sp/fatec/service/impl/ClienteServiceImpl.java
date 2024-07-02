@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.service.impl;
 
+import br.gov.sp.fatec.domain.entity.Cliente;
 import br.gov.sp.fatec.domain.mapper.ClienteMapper;
 import br.gov.sp.fatec.domain.request.ClienteRequest;
 import br.gov.sp.fatec.domain.request.ClienteUpdateRequest;
@@ -19,22 +20,33 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteResponse save(ClienteRequest clienteRequest) {
-        return null;
+        Cliente clienteSaved = clienteRepository.save(clienteMapper.map(clienteRequest));
+        return clienteMapper.map(clienteSaved);
     }
 
     @Override
     public ClienteResponse findById(Long id) {
-        return null;
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        return new ClienteResponse(cliente.getNome(), cliente.getCpf(), cliente.getTelefone());
     }
 
     @Override
     public List<ClienteResponse> findAll() {
-        return List.of();
+        List<Cliente> clientes = clienteRepository.findAll();
+        return clientes.stream().map(clienteMapper::map).toList();
     }
 
     @Override
-    public void updateById(Long id, ClienteUpdateRequest clienteUpdateRequest) {}
+    public void updateById(Long id, ClienteUpdateRequest clienteUpdateRequest) {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        cliente.setNome(clienteUpdateRequest.nome());
+        cliente.setCpf(clienteUpdateRequest.cpf());
+        cliente.setTelefone(clienteUpdateRequest.telefone());
+        clienteRepository.save(cliente);
+    }
 
     @Override
-    public void deleteById(Long id) {}
+    public void deleteById(Long id) {
+        clienteRepository.deleteById(id);
+    }
 }
