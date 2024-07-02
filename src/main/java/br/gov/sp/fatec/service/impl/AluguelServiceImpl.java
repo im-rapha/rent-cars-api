@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.service.impl;
 
+import br.gov.sp.fatec.domain.entity.Aluguel;
 import br.gov.sp.fatec.domain.mapper.AluguelMapper;
 import br.gov.sp.fatec.domain.request.AluguelRequest;
 import br.gov.sp.fatec.domain.request.AluguelUpdateRequest;
@@ -19,22 +20,31 @@ public class AluguelServiceImpl implements AluguelService {
 
     @Override
     public AluguelResponse save(AluguelRequest aluguelRequest) {
-        return null;
+        Aluguel aluguelSaved = aluguelRepository.save(aluguelMapper.map(aluguelRequest));       
+        return aluguelMapper.map(aluguelSaved);
     }
 
     @Override
     public AluguelResponse findById(Long id) {
-        return null;
+        Aluguel aluguel = aluguelRepository.findById(id).orElseThrow(() -> new RuntimeException("Aluguel não encontrado"));
+        return new AluguelResponse(aluguel.getValor());
     }
 
     @Override
     public List<AluguelResponse> findAll() {
-        return List.of();
+        List<Aluguel> alugueis = aluguelRepository.findAll();
+        return alugueis.stream().map(aluguelMapper::map).toList();
     }
 
     @Override
-    public void updateById(Long id, AluguelUpdateRequest aluguelUpdateRequest) {}
+    public void updateById(Long id, AluguelUpdateRequest aluguelUpdateRequest) {
+        Aluguel aluguel = aluguelRepository.findById(id).orElseThrow(() -> new RuntimeException("Aluguel não encontrado"));
+        aluguel.setValor(aluguelUpdateRequest.valor());
+        aluguelRepository.save(aluguel);
+    }
 
     @Override
-    public void deleteById(Long id) {}
+    public void deleteById(Long id) {
+        aluguelRepository.deleteById(id);
+    }
 }
