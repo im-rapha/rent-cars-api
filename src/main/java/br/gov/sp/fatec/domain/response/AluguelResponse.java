@@ -1,3 +1,3 @@
 package br.gov.sp.fatec.domain.response;
 
-public record AluguelResponse() {}
+public record AluguelResponse(double valor) {}
